@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace WebApiContrib.Formatting.CollectionJson
 {
@@ -16,6 +14,5 @@ namespace WebApiContrib.Formatting.CollectionJson
         public Uri Href { get; set; }
         public IList<Data> Data { get; private set; }
         public IList<Link> Links { get; private set; }
-        
     }
 }

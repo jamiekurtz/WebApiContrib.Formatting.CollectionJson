@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace WebApiContrib.Formatting.CollectionJson
 {
     public interface ICollectionJsonDocumentWriter<TItem>
     {
-        WebApiContrib.Formatting.CollectionJson.ReadDocument Write(IEnumerable<TItem> data);
+        ReadDocument Write(IEnumerable<TItem> data);
     }
 }

@@ -1,80 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Xunit;
 using Should;
+using Xunit;
 
 namespace WebApiContrib.Formatting.CollectionJson.Tests
 {
     public class CollectionJsonFormatterTest
     {
-        private CollectionJsonFormatter formatter = new CollectionJsonFormatter();
+        private readonly CollectionJsonFormatter _formatter = new CollectionJsonFormatter();
 
- 		[Fact]
+        [Fact]
         public void WhenTypeIsWriteDocumentShouldBeAbleToRead()
         {
-            formatter.CanReadType(typeof(WriteDocument)).ShouldBeTrue();
+            _formatter.CanReadType(typeof (WriteDocument)).ShouldBeTrue();
         }
 
         [Fact]
         public void WhenTypeIsWriteDocumentShouldBeAbleToWrite()
         {
-            formatter.CanWriteType(typeof(WriteDocument)).ShouldBeTrue();
+            _formatter.CanWriteType(typeof (WriteDocument)).ShouldBeTrue();
         }
 
-
-		[Fact]
+        [Fact]
         public void WhenTypeIsReadDocumentShouldBeAbleToRead()
         {
-            formatter.CanReadType(typeof(ReadDocument)).ShouldBeTrue();
+            _formatter.CanReadType(typeof (ReadDocument)).ShouldBeTrue();
         }
 
         [Fact]
         public void WhenTypeIsReadDocumentShouldBeAbleToWrite()
         {
-            formatter.CanWriteType(typeof(ReadDocument)).ShouldBeTrue();
+            _formatter.CanWriteType(typeof (ReadDocument)).ShouldBeTrue();
         }
-
 
         [Fact]
         public void WhenTypeIsStringShouldNotBeAbleToRead()
         {
-            formatter.CanReadType(typeof(string)).ShouldBeFalse();
+            _formatter.CanReadType(typeof (string)).ShouldBeFalse();
         }
 
         [Fact]
         public void WhenTypeIsStringShouldNotBeAbleToWrite()
         {
-            formatter.CanReadType(typeof(string)).ShouldBeFalse();
+            _formatter.CanReadType(typeof (string)).ShouldBeFalse();
         }
 
         [Fact]
         public void WhenInitializedShouldSetSupportedMediaTpeToCollectionJson()
         {
-            formatter.SupportedMediaTypes.Count(m => m.MediaType=="application/vnd.collection+json").ShouldEqual(1);
+            _formatter.SupportedMediaTypes.Count(m => m.MediaType == "application/vnd.collection+json").ShouldEqual(1);
         }
 
         [Fact]
         public void WhenInitializedShouldSetCamelCasePropertyResolver()
         {
-            formatter.SerializerSettings.ContractResolver.ShouldBeType<CamelCasePropertyNamesContractResolver>();
+            _formatter.SerializerSettings.ContractResolver.ShouldBeType<CamelCasePropertyNamesContractResolver>();
         }
 
         [Fact]
         public void WhenInitializedShouldSetIndentation()
         {
-            formatter.SerializerSettings.Formatting.ShouldEqual(Newtonsoft.Json.Formatting.Indented);
+            _formatter.SerializerSettings.Formatting.ShouldEqual(Newtonsoft.Json.Formatting.Indented);
         }
 
         [Fact]
         public void WhenInitializedShouldIgnoreNulls()
         {
-            formatter.SerializerSettings.NullValueHandling.ShouldEqual(NullValueHandling.Ignore);
+            _formatter.SerializerSettings.NullValueHandling.ShouldEqual(NullValueHandling.Ignore);
         }
-	
     }
-
 }

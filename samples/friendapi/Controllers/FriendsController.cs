@@ -1,51 +1,45 @@
-﻿using WebApiContrib.Formatting.CollectionJson.Infrastructure;
-using WebApiContrib.Formatting.CollectionJson.Models;
-using WebApiContrib.Formatting.CollectionJson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Http;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Net;
+using WebApiContrib.Formatting.CollectionJson.Models;
 
 namespace WebApiContrib.Formatting.CollectionJson.Controllers
 {
     public class FriendsController : CollectionJsonController<Friend>
     {
-        private IFriendRepository repo;
+        private readonly IFriendRepository _repo;
 
-        public FriendsController(IFriendRepository repo, ICollectionJsonDocumentWriter<Friend> builder, ICollectionJsonDocumentReader<Friend> transformer)
-            :base(builder, transformer)
+        public FriendsController(IFriendRepository repo, ICollectionJsonDocumentWriter<Friend> builder,
+                                 ICollectionJsonDocumentReader<Friend> transformer)
+            : base(builder, transformer)
         {
-            this.repo = repo;
+            _repo = repo;
         }
 
         protected override int Create(Friend friend, HttpResponseMessage response)
         {
-            return repo.Add(friend);
+            return _repo.Add(friend);
         }
 
         protected override IEnumerable<Friend> Read(HttpResponseMessage response)
         {
-            return repo.GetAll();
+            return _repo.GetAll();
         }
 
         protected override Friend Read(int id, HttpResponseMessage response)
         {
-            return repo.Get(id);
+            return _repo.Get(id);
         }
 
         protected override Friend Update(int id, Friend friend, HttpResponseMessage response)
         {
             friend.Id = id;
-            repo.Update(friend);
+            _repo.Update(friend);
             return friend;
         }
 
         protected override void Delete(int id, HttpResponseMessage response)
         {
-            repo.Remove(id);
+            _repo.Remove(id);
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
 using Should;
-using WebApiContrib.Formatting.CollectionJson;
+using Xunit;
 
 namespace WebApiContrib.Formatting.CollectionJson.Tests
 {
@@ -19,7 +16,7 @@ namespace WebApiContrib.Formatting.CollectionJson.Tests
                     new Link {Rel = "Bar"}
                 };
 
-            links.GetLinksByRel("Foo").Count(l=>l.Rel == "Foo").ShouldEqual(1);
+            links.GetLinksByRel("Foo").Count(l => l.Rel == "Foo").ShouldEqual(1);
         }
 
         [Fact]
@@ -33,7 +30,5 @@ namespace WebApiContrib.Formatting.CollectionJson.Tests
 
             data.GetDataByName("Foo").Name.ShouldEqual("Foo");
         }
-
-
     }
 }

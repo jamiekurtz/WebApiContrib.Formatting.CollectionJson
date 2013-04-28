@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace WebApiContrib.Formatting.CollectionJson
 {
@@ -22,12 +20,4 @@ namespace WebApiContrib.Formatting.CollectionJson
         public IList<Query> Queries { get; private set; }
         public Template Template { get; private set; }
     }
-
- 
-
-
-
-
-
-
 }

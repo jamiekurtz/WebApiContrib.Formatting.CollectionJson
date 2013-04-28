@@ -1,8 +1,5 @@
-﻿using WebApiContrib.Formatting.CollectionJson.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using WebApiContrib.Formatting.CollectionJson.Models;
 
 namespace WebApiContrib.Formatting.CollectionJson.Infrastructure
 {
@@ -10,7 +7,7 @@ namespace WebApiContrib.Formatting.CollectionJson.Infrastructure
     {
         public Friend Read(WriteDocument document)
         {
-            var template = document.Template;
+            Template template = document.Template;
             var friend = new Friend();
             friend.FullName = template.Data.GetDataByName("name").Value;
             friend.Email = template.Data.GetDataByName("email").Value;
@@ -19,5 +16,4 @@ namespace WebApiContrib.Formatting.CollectionJson.Infrastructure
             return friend;
         }
     }
-
 }

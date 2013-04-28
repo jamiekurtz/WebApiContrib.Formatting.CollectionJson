@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WebApiContrib.Formatting.CollectionJson
+﻿namespace WebApiContrib.Formatting.CollectionJson
 {
-
     public class Error
     {
         public string Title { get; set; }

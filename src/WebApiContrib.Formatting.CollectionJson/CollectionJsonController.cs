@@ -1,81 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 
 namespace WebApiContrib.Formatting.CollectionJson
 {
-    public abstract class CollectionJsonController<TData> : CollectionJsonController<TData,int>
+    public abstract class CollectionJsonController<TData> : CollectionJsonController<TData, int>
     {
-        protected CollectionJsonController(ICollectionJsonDocumentWriter<TData> writer, ICollectionJsonDocumentReader<TData> reader, string routeName = "DefaultApi") :
-            base(writer, reader, routeName)
+        protected CollectionJsonController(ICollectionJsonDocumentWriter<TData> writer,
+                                           ICollectionJsonDocumentReader<TData> reader, string routeName = "DefaultApi")
+            :
+                base(writer, reader, routeName)
         {
         }
     }
 
-    public abstract class CollectionJsonController<TData,TId> : ApiController 
+    public abstract class CollectionJsonController<TData, TId> : ApiController
     {
-        private CollectionJsonFormatter formatter = new CollectionJsonFormatter();
-        private string routeName;
-        private ICollectionJsonDocumentWriter<TData> writer;
-        private ICollectionJsonDocumentReader<TData> reader;
+        private readonly CollectionJsonFormatter _formatter = new CollectionJsonFormatter();
+        private readonly ICollectionJsonDocumentReader<TData> _reader;
+        private readonly string _routeName;
+        private readonly ICollectionJsonDocumentWriter<TData> _writer;
 
-        public CollectionJsonController(ICollectionJsonDocumentWriter<TData> writer, ICollectionJsonDocumentReader<TData> reader, string routeName = "DefaultApi")
+        public CollectionJsonController(ICollectionJsonDocumentWriter<TData> writer,
+                                        ICollectionJsonDocumentReader<TData> reader, string routeName = "DefaultApi")
         {
-            this.routeName = routeName;
-            this.writer = writer;
-            this.reader = reader;
+            _routeName = routeName;
+            _writer = writer;
+            _reader = reader;
         }
 
-        protected override void Initialize(System.Web.Http.Controllers.HttpControllerContext controllerContext)
-        {
-            controllerContext.Configuration.Formatters.Add(formatter);
-            base.Initialize(controllerContext);
-        }
 
-       
         private string ControllerName
         {
-            get { return this.ControllerContext.ControllerDescriptor.ControllerName; }
+            get { return ControllerContext.ControllerDescriptor.ControllerName; }
+        }
+
+        protected override void Initialize(HttpControllerContext controllerContext)
+        {
+            controllerContext.Configuration.Formatters.Add(_formatter);
+            base.Initialize(controllerContext);
         }
 
         private ObjectContent GetDocumentContent(ReadDocument document)
         {
-            return new ObjectContent<ReadDocument>(document, formatter, "application/vnd.collection+json");
+            return new ObjectContent<ReadDocument>(document, _formatter, "application/vnd.collection+json");
         }
 
         public HttpResponseMessage Get()
         {
             var response = new HttpResponseMessage();
-            var data = this.Read(response);
-            response.Content = GetDocumentContent(writer.Write(data));
+            IEnumerable<TData> data = Read(response);
+            response.Content = GetDocumentContent(_writer.Write(data));
             return response;
         }
 
         public HttpResponseMessage Get(TId id)
         {
             var response = new HttpResponseMessage();
-            var data = this.Read(id, response);
-            response.Content = GetDocumentContent(writer.Write(new[]{data}));
+            TData data = Read(id, response);
+            response.Content = GetDocumentContent(_writer.Write(new[] {data}));
             return response;
         }
 
         public HttpResponseMessage Post(WriteDocument document)
         {
             var response = new HttpResponseMessage(HttpStatusCode.Created);
-            var id = Create(reader.Read(document), response);
-            response.Headers.Location = new Uri(Url.Link(this.routeName, new { controller = this.ControllerName, id = id }));
+            int id = Create(_reader.Read(document), response);
+            response.Headers.Location = new Uri(Url.Link(_routeName, new {controller = ControllerName, id}));
             return response;
         }
 
         public HttpResponseMessage Put(TId id, WriteDocument document)
         {
             var response = new HttpResponseMessage();
-            var data = this.Update(id, reader.Read(document), response);
-            response.Content = GetDocumentContent(writer.Write(new TData[]{data}));
+            TData data = Update(id, _reader.Read(document), response);
+            response.Content = GetDocumentContent(_writer.Write(new[] {data}));
             return response;
         }
 
@@ -89,27 +91,27 @@ namespace WebApiContrib.Formatting.CollectionJson
 
         protected virtual int Create(TData data, HttpResponseMessage response)
         {
-            throw new HttpResponseException(System.Net.HttpStatusCode.NotImplemented);
+            throw new HttpResponseException(HttpStatusCode.NotImplemented);
         }
 
         protected virtual TData Read(TId id, HttpResponseMessage response)
         {
-            throw new HttpResponseException(System.Net.HttpStatusCode.NotImplemented);
+            throw new HttpResponseException(HttpStatusCode.NotImplemented);
         }
 
         protected virtual IEnumerable<TData> Read(HttpResponseMessage response)
         {
-            throw new HttpResponseException(System.Net.HttpStatusCode.NotImplemented);
+            throw new HttpResponseException(HttpStatusCode.NotImplemented);
         }
 
         protected virtual TData Update(TId id, TData data, HttpResponseMessage response)
         {
-            throw new HttpResponseException(System.Net.HttpStatusCode.NotImplemented);
+            throw new HttpResponseException(HttpStatusCode.NotImplemented);
         }
 
         protected virtual void Delete(TId id, HttpResponseMessage response)
         {
-            throw new HttpResponseException(System.Net.HttpStatusCode.NotImplemented);
+            throw new HttpResponseException(HttpStatusCode.NotImplemented);
         }
     }
 }
